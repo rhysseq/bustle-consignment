@@ -12,15 +12,15 @@ export interface ILocationsResponse {
  * @returns {Promise<ILocationsResponse>} - The parsed JSON response.
  * @throws {Error} - If the response format is invalid.
  */
-const parseLocationsResponse = async (response: Response): Promise<ILocationsResponse> => {
-    const data = await response.json();
+// const parseLocationsResponse = async (response: Response): Promise<ILocationsResponse> => {
+//     const data = await response.json();
 
-    if (!data.locations || !Array.isArray(data.locations)) {
-        throw new Error("Invalid response format");
-    }
+//     if (!data.locations || !Array.isArray(data.locations)) {
+//         throw new Error("Invalid response format");
+//     }
 
-    return data;
-};
+//     return data;
+// };
 
 /**
  * Fetches the list of available locations from the API.
@@ -29,17 +29,34 @@ const parseLocationsResponse = async (response: Response): Promise<ILocationsRes
  * @throws {Error} - If fetching fails.
  */
 export const fetchLocations = async (): Promise<string[]> => {
-    try {
-        const response = await fetch("/api/locations");
-        if (!response.ok) {
-            throw new Error("Failed to fetch locations");
-        }
+    // try {
+    //     const response = await fetch("/api/locations");
+    //     if (!response.ok) {
+    //         throw new Error("Failed to fetch locations");
+    //     }
 
-        const { locations } = await parseLocationsResponse(response);
+    //     const { locations } = await parseLocationsResponse(response);
 
-        return locations;
-    } catch (error) {
-        console.error("Error fetching locations:", error);
-        throw new Error("Unable to load locations. Please try again later.");
-    }
+    //     return locations;
+    // } catch (error) {
+    //     console.error("Error fetching locations:", error);
+    //     throw new Error("Unable to load locations. Please try again later.");
+    // }
+    return new Promise<string[]>((resolve, reject) => {
+        setTimeout(async () => {
+            try {
+                const shouldFail = Math.random() < 0.2;
+                if (shouldFail) {
+                    throw new Error("Simulated fetch error");
+                }
+
+                const locations = ['Perth', 'Sydney', 'Melbourne', 'Brisbane', 'Adelaide', 'Darwin', 'Hobart', 'Canberra'];
+
+                resolve(locations);
+            } catch (error) {
+                console.error("Error fetching locations:", error);
+                reject(new Error("Unable to load locations. Please try again later."));
+            }
+        }, 1000); // 1 second timeout for testing
+    });
 };
